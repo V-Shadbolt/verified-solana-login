@@ -1,70 +1,39 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Unstoppable Domains Verified (Solana) Login
 
-## Available Scripts
+This example app provides a a basic implementation on veryifying Unstoppable Login for different chains. While UD is EVM focussed, UD allows users to sign their login using multiple different wallet providers, such as Phantom (Solana). Dapps that exclusivly support Solana wallets for example, can still utilize login with Unstoppable and use this example to verify the UD user logged in with their verified Phantom (Solana) address. This can be extended to other verifiable addresses.
 
-In the project directory, you can run:
+**Prereq**
+Rename `.env.example` to `.env` and replace `tobemodified` with your Unstoppable Domains client config. Client configs can be generated following this [guide](https://docs.unstoppabledomains.com/identity/quickstart/retrieve-client-credentials/). Replace `000000000` with your Infura API key.
 
-### `npm start`
+This guide is based on the Unstoppable Domains (Web3 React Integration Pathway)[https://docs.unstoppabledomains.com/identity/quickstart/other-integration-paths/web3-react/]
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Install 
+**NPM**
+`npm install`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Yarn**
+`yarn install`
 
-### `npm test`
+### Running the Script
+`yarn start`
+`npm start`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Breakdown
 
-### `npm run build`
+The `App.js` file outlines the basic function needed to verify if a user logged in with their verified SOL address. Once the user has successfully signed their login attempt, it parses the JSON response to console log the `domain name` and to check if the `account.symbol` is `SOL`. On error, the function logs an error message to console. In practice, the error could be useed to reject the login or otherwise prompt the user to sign their login with `Phantom`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```javascript
+async function checkVerified() {
+      if (isActive) {
+        const authorization = await connector.uauth.authorization() // Get Login attempt JSON
+        const account = connector.uauth.getAuthorizationAccount(authorization); // Get Account for login attempt
+        const user = await connector.uauth.user(); // Get User
+        console.log(user.sub) // Console log the domain name
+        // Check if user signed with SOL account
+        if (account.symbol !== "SOL") {
+          console.error("User logged in without a Verified SOL address. Please retry with Phantom")
+        }
+      }
+    }
+```

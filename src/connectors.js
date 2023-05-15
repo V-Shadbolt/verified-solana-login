@@ -27,7 +27,7 @@ const uauth = initializeConnector(
       clientID: process.env.REACT_APP_CLIENT_ID,
       redirectUri: process.env.REACT_APP_REDIRECT_URI,
       // Scope must include openid and wallet
-      scope: 'openid wallet',
+      scope: process.env.REACT_APP_SCOPES,
 
       // Injected/metamask and walletconnect connectors are required
       connectors: {injected: metaMask[0], walletconnect: walletConnect[0]}
